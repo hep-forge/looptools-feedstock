@@ -1,5 +1,5 @@
 {% set versions = {
-    "0.0.0": "REPLACE_WITH_SHA256"
+    "2.16": "4113467575db3a14405d62d9e516b3b90410b73ea8d20c8eb8d70a30fc5cc9cb"
 } %}
 
 {% set version = environ.get('COMMIT_VERSION', None) %}
@@ -13,36 +13,48 @@ package:
   version: {{ environ.get('ANACONDA_VERSION', version)|replace("-", ".") }}
 
 source:
-  url: "https://feynarts.de/looptools/archive/refs/tags/{{ version }}.tar.gz"   # TODO: confirm upstream's actual tag/tarball naming
+  url: "https://feynarts.de/looptools/LoopTools-{{ version }}.tar.gz"
   {% if versions.get(version, None) %}
   sha256: {{ versions.get(version) }}
   {% endif %}
 
 build:
   number: 0
-  run_exports:
-    - {{ pin_subpackage(name, max_pin="x.x.x") }}
 
 requirements:
   build:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
     - {{ stdlib('c') }}
-    - cmake
+    - {{ compiler('cxx') }}
+    - {{ compiler('gfortran') }}
     - make
-  host:
-    # TODO: library dependencies
+    - pkg-config
+    - gnuconfig
+    - sed
+    - gawk
   run:
-    # TODO: runtime dependencies
+    # LoopTools' own "fcc"/"f++" wrapper scripts require a C/C++ compiler at runtime
+    - gxx
 
 test:
+  requires:
+    - {{ compiler('cxx') }}
+    - gfortran
   commands:
-    - echo "TODO: a real smoke test"
+    - test -f $PREFIX/lib/libooptools.a
+    - test -f $PREFIX/include/looptools.h
+    - test -f $PREFIX/bin/lt
+    - fcc --help
+    - f++ --help
 
 about:
-  home: "https://feynarts.de/looptools"
+  home: "https://feynarts.de/looptools/"
   license: "GPL-3.0-only"
+  license_file: COPYING
   summary: "LoopTools: evaluation of scalar and tensor one-loop integrals"
+  description: |
+    LoopTools evaluates scalar and tensor one-loop integrals, building on
+    the FF package by G.J. van Oldenborgh, with Fortran, C++, and
+    Mathematica interfaces.
 
 extra:
   recipe-maintainers:
