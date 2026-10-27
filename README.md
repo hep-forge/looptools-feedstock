@@ -13,7 +13,12 @@ LoopTools: evaluation of scalar and tensor one-loop integrals
 
 ## Architectures
 
-State per architecture: see the platforms badge above or [anaconda.org/hep-forge/looptools](https://anaconda.org/hep-forge/looptools).
+| Architecture | Latest published |
+|--------------|------------------|
+| linux-amd64 (`linux-64`) | ✅ `2.16` |
+| linux-arm64 (`linux-aarch64`) | ✅ `2.16` |
+
+_As of the last feedstock render; the badges above are live._
 
 
 ## Install
