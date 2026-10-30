@@ -19,13 +19,13 @@ source:
   {% endif %}
 
 build:
-  number: 0
+  number: 1
 
 requirements:
   build:
     - {{ stdlib('c') }}
     - {{ compiler('cxx') }}
-    - {{ compiler('gfortran') }}
+    - {{ compiler('fortran') }}
     - make
     - pkg-config
     - gnuconfig
